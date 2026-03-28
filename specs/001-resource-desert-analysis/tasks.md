@@ -94,13 +94,13 @@
 
 ### Tests for User Story 3 ⚠️ Write first — confirm they FAIL before implementing
 
-- [ ] T021 [P] [US3] Write failing unit tests for `run_gap_closure_simulation()` and `rank_interventions()` in `tests/test_models.py`: assert output has `top_n × 4` rows, exactly 1 row with `is_highest_impact=True`, `score_improvement` ≥ 0 for all rows, `pct_improvement` in [0, 100]
+- [x] T021 [P] [US3] Write failing unit tests for `run_gap_closure_simulation()` and `rank_interventions()` in `tests/test_models.py`: assert output has `top_n × 4` rows, exactly 1 row with `is_highest_impact=True`, `score_improvement` ≥ 0 for all rows, `pct_improvement` in [0, 100]
 
 ### Implementation for User Story 3
 
-- [ ] T022 [US3] Implement `run_gap_closure_simulation(desert_scores_df: pd.DataFrame, merged_df: pd.DataFrame, top_n: int = 5) -> pd.DataFrame` in `src/models.py`: for each of the top-N ZIPs × 4 resource types, set the supply metric to the 75th percentile of that column, recompute the desert score, return interventions_df with `current_desert_score`, `simulated_desert_score`, `score_improvement`, `pct_improvement`, `population_impacted`
-- [ ] T023 [US3] Implement `rank_interventions(interventions_df: pd.DataFrame) -> pd.DataFrame` in `src/models.py`: sort by `score_improvement` descending; set `is_highest_impact = True` on the single top row; write to `reports/outputs/intervention_recommendations.json`
-- [ ] T024 [US3] Implement `plot_intervention_impact_heatmap(interventions_df: pd.DataFrame, figures_dir: Path) -> None` in `src/visualization.py`: seaborn heatmap with ZIPs on y-axis, resource types on x-axis, `pct_improvement` as values; highest-impact cell annotated with star; saved to `reports/figures/intervention_impact_heatmap.png` at ≥150 DPI
+- [x] T022 [US3] Implement `run_gap_closure_simulation(desert_scores_df: pd.DataFrame, merged_df: pd.DataFrame, top_n: int = 5) -> pd.DataFrame` in `src/models.py`: for each of the top-N ZIPs × 4 resource types, set the supply metric to the 75th percentile of that column, recompute the desert score, return interventions_df with `current_desert_score`, `simulated_desert_score`, `score_improvement`, `pct_improvement`, `population_impacted`
+- [x] T023 [US3] Implement `rank_interventions(interventions_df: pd.DataFrame) -> pd.DataFrame` in `src/models.py`: sort by `score_improvement` descending; set `is_highest_impact = True` on the single top row; write to `reports/outputs/intervention_recommendations.json`
+- [x] T024 [US3] Implement `plot_intervention_impact_heatmap(interventions_df: pd.DataFrame, figures_dir: Path) -> None` in `src/visualization.py`: seaborn heatmap with ZIPs on y-axis, resource types on x-axis, `pct_improvement` as values; highest-impact cell annotated with star; saved to `reports/figures/intervention_impact_heatmap.png` at ≥150 DPI
 
 **Checkpoint**: US3 complete — simulation JSON written, heatmap saved, highest-impact intervention identifiable in <2 minutes.
 
