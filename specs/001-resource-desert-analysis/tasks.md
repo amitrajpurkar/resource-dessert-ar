@@ -114,8 +114,8 @@
 
 ### Implementation for User Story 4
 
-- [ ] T025 [P] [US4] Implement `filter_by_service_category(desert_scores_df: pd.DataFrame, category: str) -> pd.DataFrame` in `src/features.py`: accepts `"healthcare"`, `"food_access"`, `"parks"`, `"insurance"`; returns df filtered to relevant supply gap column + demand columns; re-ranks ZIPs by that single gap column
-- [ ] T026 [US4] Implement `plot_category_view(category_df: pd.DataFrame, category: str, figures_dir: Path) -> None` in `src/visualization.py`: horizontal bar chart showing supply gap + poverty rate for all ZIPs in the category view; saved to `reports/figures/category_{category}_view.png` at ≥150 DPI
+- [x] T025 [P] [US4] Implement `filter_by_service_category(desert_scores_df: pd.DataFrame, category: str) -> pd.DataFrame` in `src/features.py`: accepts `"healthcare"`, `"food_access"`, `"parks"`, `"insurance"`; returns df filtered to relevant supply gap column + demand columns; re-ranks ZIPs by that single gap column
+- [x] T026 [US4] Implement `plot_category_view(category_df: pd.DataFrame, category: str, figures_dir: Path) -> None` in `src/visualization.py`: horizontal bar chart showing supply gap + poverty rate for all ZIPs in the category view; saved to `reports/figures/category_{category}_view.png` at ≥150 DPI
 
 **Checkpoint**: All 4 user stories independently functional.
 
