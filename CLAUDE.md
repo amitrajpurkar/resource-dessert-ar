@@ -151,3 +151,10 @@ black>=24.0
 ---
 
 *Last updated: March 27, 2026*
+
+## Active Technologies
+- Python 3.11+ + pandas ≥2.0, numpy ≥1.26, scikit-learn ≥1.4, matplotlib ≥3.8, seaborn ≥0.13, folium ≥0.15, geopandas ≥0.14, jupyter ≥1.0, openpyxl ≥3.1, pytest ≥8.0, pytest-cov ≥4.1, ruff ≥0.4, black ≥24.0 (001-resource-desert-analysis)
+- Local files only — reads from `data/raw/` (read-only); writes to `data/processed/`, `reports/outputs/`, `reports/figures/` (001-resource-desert-analysis)
+
+## Recent Changes
+- 001-resource-desert-analysis: Added Python 3.11+ + pandas ≥2.0, numpy ≥1.26, scikit-learn ≥1.4, matplotlib ≥3.8, seaborn ≥0.13, folium ≥0.15, geopandas ≥0.14, jupyter ≥1.0, openpyxl ≥3.1, pytest ≥8.0, pytest-cov ≥4.1, ruff ≥0.4, black ≥24.0

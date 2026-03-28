@@ -20,12 +20,12 @@
 
 **Purpose**: Create the project skeleton, pin dependencies, and establish path/logging conventions before any pipeline code is written.
 
-- [ ] T001 Create output directories: `reports/figures/`, `reports/outputs/`, `data/processed/`, `notebooks/` (use `mkdir -p`)
-- [ ] T002 Create `requirements.txt` pinning: pandas≥2.0, numpy≥1.26, scikit-learn≥1.4, matplotlib≥3.8, seaborn≥0.13, folium≥0.15, geopandas≥0.14, jupyter≥1.0, openpyxl≥3.1, pytest≥8.0, pytest-cov≥4.1, ruff≥0.4, black≥24.0
-- [ ] T003 [P] Create `pytest.ini` registering the `e2e` marker: `markers = e2e: end-to-end tests that require data/raw/ to be populated`
-- [ ] T004 [P] Create `src/config.py` with `pathlib.Path` constants for every directory and raw data file path referenced in `contracts/pipeline-io-contracts.md`; add `get_logger(name: str) -> logging.Logger` helper
-- [ ] T005 Create `tests/conftest.py` with synthetic fixture DataFrames covering all 5 pipeline entities: `sample_census_df`, `sample_cdc_df`, `sample_usda_df`, `sample_healthcare_df`, `sample_parks_df`, `sample_merged_df`, `sample_desert_scores_df`
-- [ ] T006 [P] Inspect `data/raw/Metadata.xlsx` and populate `specs/001-resource-desert-analysis/column-reference.md` with the exact column names needed from each of the 9 raw datasets (ZIP column name, demand metrics, supply metrics)
+- [x] T001 Create output directories: `reports/figures/`, `reports/outputs/`, `data/processed/`, `notebooks/` (use `mkdir -p`)
+- [x] T002 Create `requirements.txt` pinning: pandas≥2.0, numpy≥1.26, scikit-learn≥1.4, matplotlib≥3.8, seaborn≥0.13, folium≥0.15, geopandas≥0.14, jupyter≥1.0, openpyxl≥3.1, pytest≥8.0, pytest-cov≥4.1, ruff≥0.4, black≥24.0
+- [x] T003 [P] Create `pytest.ini` registering the `e2e` marker: `markers = e2e: end-to-end tests that require data/raw/ to be populated`
+- [x] T004 [P] Create `src/config.py` with `pathlib.Path` constants for every directory and raw data file path referenced in `contracts/pipeline-io-contracts.md`; add `get_logger(name: str) -> logging.Logger` helper
+- [x] T005 Create `tests/conftest.py` with synthetic fixture DataFrames covering all 5 pipeline entities: `sample_census_df`, `sample_cdc_df`, `sample_usda_df`, `sample_healthcare_df`, `sample_parks_df`, `sample_merged_df`, `sample_desert_scores_df`
+- [x] T006 [P] Inspect `data/raw/Metadata.xlsx` and populate `specs/001-resource-desert-analysis/column-reference.md` with the exact column names needed from each of the 9 raw datasets (ZIP column name, demand metrics, supply metrics)
 
 ---
 
@@ -35,8 +35,8 @@
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete.
 
-- [ ] T007 Create stub files `src/ingestion.py`, `src/cleaning.py`, `src/features.py`, `src/models.py`, `src/visualization.py` — each with all public function signatures, full type hints, Google-style docstrings, and `raise NotImplementedError` bodies. Use exact signatures from `contracts/pipeline-io-contracts.md`.
-- [ ] T008 [P] Create `tests/__init__.py`, `tests/e2e/__init__.py` (empty); verify `pytest tests/ -v -m "not e2e"` collects tests without errors (0 passed, 0 errors is acceptable at this stage)
+- [x] T007 Create stub files `src/ingestion.py`, `src/cleaning.py`, `src/features.py`, `src/models.py`, `src/visualization.py` — each with all public function signatures, full type hints, Google-style docstrings, and `raise NotImplementedError` bodies. Use exact signatures from `contracts/pipeline-io-contracts.md`.
+- [x] T008 [P] Create `tests/__init__.py`, `tests/e2e/__init__.py` (empty); verify `pytest tests/ -v -m "not e2e"` collects tests without errors (0 passed, 0 errors is acceptable at this stage)
 
 **Checkpoint**: Foundation ready — user story implementation can begin.
 
@@ -50,18 +50,18 @@
 
 ### Tests for User Story 1 ⚠️ Write first — confirm they FAIL before implementing
 
-- [ ] T009 [P] [US1] Write failing unit tests for `load_raw_datasets()` in `tests/test_ingestion.py`: assert correct dict keys returned, each value is a DataFrame with ≥1 row, `FileNotFoundError` raised when a path is missing (use tmp_path fixture)
-- [ ] T010 [P] [US1] Write failing unit tests for `clean_datasets()` in `tests/test_cleaning.py`: assert `zip_code` is str 5-char zero-padded, no duplicate zip_codes per dataset, rate columns clipped to [0,1], row-drop count is logged
-- [ ] T011 [P] [US1] Write failing unit tests for `merge_datasets()` and `compute_desert_score()` in `tests/test_features.py`: assert merged df has no duplicate zip_codes, `desert_score` in [0,100], `desert_rank` starts at 1, ZIPs with population=0 absent
+- [x] T009 [P] [US1] Write failing unit tests for `load_raw_datasets()` in `tests/test_ingestion.py`: assert correct dict keys returned, each value is a DataFrame with ≥1 row, `FileNotFoundError` raised when a path is missing (use tmp_path fixture)
+- [x] T010 [P] [US1] Write failing unit tests for `clean_datasets()` in `tests/test_cleaning.py`: assert `zip_code` is str 5-char zero-padded, no duplicate zip_codes per dataset, rate columns clipped to [0,1], row-drop count is logged
+- [x] T011 [P] [US1] Write failing unit tests for `merge_datasets()` and `compute_desert_score()` in `tests/test_features.py`: assert merged df has no duplicate zip_codes, `desert_score` in [0,100], `desert_rank` starts at 1, ZIPs with population=0 absent
 
 ### Implementation for User Story 1
 
-- [ ] T012 [US1] Implement `load_raw_datasets(config: ModuleType) -> Dict[str, pd.DataFrame]` in `src/ingestion.py`: load all 9 CSVs + `Metadata.xlsx` via `pathlib.Path`; log shape/dtypes; raise `FileNotFoundError` with descriptive message for any missing file; return raw unmodified DataFrames
-- [ ] T013 [US1] Implement `clean_datasets(raw: Dict[str, pd.DataFrame]) -> Dict[str, pd.DataFrame]` in `src/cleaning.py`: standardize ZIP column to `zip_code` (str, 5-char, zero-padded) across all datasets; fix dtypes; clip rate/proportion columns to [0.0, 1.0]; drop duplicates; log before/after record counts and reasons for every drop
-- [ ] T014 [US1] Implement `merge_datasets(cleaned: Dict[str, pd.DataFrame]) -> pd.DataFrame` in `src/features.py`: outer-join all datasets on `zip_code`; filter to Duval County ZIPs; log and exclude ZIPs with `population == 0`; impute null supply metrics with column median (log imputation count); save to `data/processed/merged_jacksonville.csv`
-- [ ] T015 [US1] Implement `compute_desert_score(merged_df: pd.DataFrame) -> pd.DataFrame` in `src/features.py`: compute `demand_factor = normalize(poverty_rate × disease_burden_composite)`; compute `supply_gap_*` for each of 4 asset types; compute `desert_score = normalize(Σ supply_gap_i × demand_factor) × 100`; add `desert_rank` (ties broken by `poverty_rate` desc); save to `reports/outputs/desert_scores.csv`
-- [ ] T016 [P] [US1] Implement `plot_desert_scores_bar_chart(desert_scores_df: pd.DataFrame, figures_dir: Path) -> None` in `src/visualization.py`: horizontal bar chart of top-10 ZIPs by Desert Score; descriptive title; labelled axes with units; saved to `reports/figures/desert_scores_bar_chart.png` at ≥150 DPI
-- [ ] T017 [US1] Implement `create_choropleth_map(desert_scores_df: pd.DataFrame, geojson_path: Path, outputs_dir: Path) -> None` in `src/visualization.py`: Folium choropleth keyed on `ZCTA5CE20`; `RdYlGn_r` palette; tooltip showing zip, score, top gap category; saved as standalone HTML to `reports/outputs/resource_desert_map.html`
+- [x] T012 [US1] Implement `load_raw_datasets(config: ModuleType) -> Dict[str, pd.DataFrame]` in `src/ingestion.py`: load all 9 CSVs + `Metadata.xlsx` via `pathlib.Path`; log shape/dtypes; raise `FileNotFoundError` with descriptive message for any missing file; return raw unmodified DataFrames
+- [x] T013 [US1] Implement `clean_datasets(raw: Dict[str, pd.DataFrame]) -> Dict[str, pd.DataFrame]` in `src/cleaning.py`: standardize ZIP column to `zip_code` (str, 5-char, zero-padded) across all datasets; fix dtypes; clip rate/proportion columns to [0.0, 1.0]; drop duplicates; log before/after record counts and reasons for every drop
+- [x] T014 [US1] Implement `merge_datasets(cleaned: Dict[str, pd.DataFrame]) -> pd.DataFrame` in `src/features.py`: outer-join all datasets on `zip_code`; filter to Duval County ZIPs; log and exclude ZIPs with `population == 0`; impute null supply metrics with column median (log imputation count); save to `data/processed/merged_jacksonville.csv`
+- [x] T015 [US1] Implement `compute_desert_score(merged_df: pd.DataFrame) -> pd.DataFrame` in `src/features.py`: compute `demand_factor = normalize(poverty_rate × disease_burden_composite)`; compute `supply_gap_*` for each of 4 asset types; compute `desert_score = normalize(Σ supply_gap_i × demand_factor) × 100`; add `desert_rank` (ties broken by `poverty_rate` desc); save to `reports/outputs/desert_scores.csv`
+- [x] T016 [P] [US1] Implement `plot_desert_scores_bar_chart(desert_scores_df: pd.DataFrame, figures_dir: Path) -> None` in `src/visualization.py`: horizontal bar chart of top-10 ZIPs by Desert Score; descriptive title; labelled axes with units; saved to `reports/figures/desert_scores_bar_chart.png` at ≥150 DPI
+- [x] T017 [US1] Implement `create_choropleth_map(desert_scores_df: pd.DataFrame, geojson_path: Path, outputs_dir: Path) -> None` in `src/visualization.py`: Folium choropleth keyed on `ZCTA5CE20`; `RdYlGn_r` palette; tooltip showing zip, score, top gap category; saved as standalone HTML to `reports/outputs/resource_desert_map.html`
 
 **Checkpoint**: US1 complete — `desert_scores.csv` written, map HTML opens in browser, bar chart saved.
 

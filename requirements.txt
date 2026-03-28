@@ -1,0 +1,14 @@
+pandas>=2.0
+numpy>=1.26
+scikit-learn>=1.4
+matplotlib>=3.8
+seaborn>=0.13
+folium>=0.15
+geopandas>=0.14
+jupyter>=1.0
+openpyxl>=3.1
+pytest>=8.0
+pytest-cov>=4.1
+ruff>=0.4
+black>=24.0
+nbconvert>=7.0
