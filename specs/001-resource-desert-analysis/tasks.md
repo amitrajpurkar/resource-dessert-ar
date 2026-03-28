@@ -75,12 +75,12 @@
 
 ### Tests for User Story 2 ⚠️ Write first — confirm they FAIL before implementing
 
-- [ ] T018 [P] [US2] Write failing unit tests for `compute_health_outcome_correlation()` in `tests/test_features.py`: assert returns a dict/DataFrame of Pearson r values, all values in [-1, 1], at least one asset-outcome pair present
+- [x] T018 [P] [US2] Write failing unit tests for `compute_health_outcome_correlation()` in `tests/test_features.py`: assert returns a dict/DataFrame of Pearson r values, all values in [-1, 1], at least one asset-outcome pair present
 
 ### Implementation for User Story 2
 
-- [ ] T019 [US2] Implement `compute_health_outcome_correlation(merged_df: pd.DataFrame) -> pd.DataFrame` in `src/features.py`: compute Pearson correlation between each of the 4 preventative asset metrics and each health outcome metric (mental health distress rate, diabetes prevalence); return correlation matrix; log strongest association
-- [ ] T020 [US2] Implement `plot_preventative_vs_outcome(merged_df: pd.DataFrame, asset_col: str, outcome_col: str, figures_dir: Path) -> None` in `src/visualization.py`: scatter plot with seaborn `regplot`; axis labels include metric name + units; top-3 and bottom-3 ZIPs annotated by zip_code; saved to `reports/figures/preventative_asset_vs_health_outcome.png` at ≥150 DPI
+- [x] T019 [US2] Implement `compute_health_outcome_correlation(merged_df: pd.DataFrame) -> pd.DataFrame` in `src/features.py`: compute Pearson correlation between each of the 4 preventative asset metrics and each health outcome metric (mental health distress rate, diabetes prevalence); return correlation matrix; log strongest association
+- [x] T020 [US2] Implement `plot_preventative_vs_outcome(merged_df: pd.DataFrame, asset_col: str, outcome_col: str, figures_dir: Path) -> None` in `src/visualization.py`: scatter plot with seaborn `regplot`; axis labels include metric name + units; top-3 and bottom-3 ZIPs annotated by zip_code; saved to `reports/figures/preventative_asset_vs_health_outcome.png` at ≥150 DPI
 
 **Checkpoint**: US2 complete — correlation chart saved with regression line and annotated extremes.
 
