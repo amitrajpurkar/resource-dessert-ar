@@ -21,10 +21,10 @@
 
 **Purpose**: Directory structure, test scaffold, and metadata reference — must complete before any notebook is written.
 
-- [ ] T001 Create `notebooks/eda/` directory (mkdir -p notebooks/eda)
-- [ ] T002 Create `tests/e2e/` directory and empty `tests/e2e/__init__.py`
-- [ ] T003 Add `nbmake` to `requirements.txt` for notebook e2e testing
-- [ ] T004 [P] Read `data/raw/Metadata.xlsx` and produce `specs/002-per-dataset-eda-notebooks/column-reference.md` listing column names and definitions for all 9 source files — used as reference when writing schema section headers
+- [x] T001 Create `notebooks/eda/` directory (mkdir -p notebooks/eda)
+- [x] T002 Create `tests/e2e/` directory and empty `tests/e2e/__init__.py`
+- [x] T003 Add `nbmake` to `requirements.txt` for notebook e2e testing
+- [x] T004 [P] Read `data/raw/Metadata.xlsx` and produce `specs/002-per-dataset-eda-notebooks/column-reference.md` listing column names and definitions for all 9 source files — used as reference when writing schema section headers
 
 **Checkpoint**: Directory structure ready; column reference available for notebook authors.
 
@@ -34,10 +34,10 @@
 
 **Purpose**: Shared e2e test runner that validates all 9 notebooks — written once, extended as notebooks are added.
 
-⚠️ **CRITICAL**: The test file scaffold must exist before user story phases begin so tests can be run incrementally.
+⚠️ **CRITICAL**: The test file scaffold MUST exist before user story phases begin (Constitution Principle III — Test-First). Tests MUST be written first and verified to fail (no notebooks yet) before implementation starts.
 
-- [ ] T005 Create `tests/e2e/test_eda_notebooks.py` with a parameterized e2e test using `nbmake` that discovers and executes all `.ipynb` files in `notebooks/eda/`, tagged `@pytest.mark.e2e`
-- [ ] T006 Verify `pytest --nbmake notebooks/eda/ -v` command works on an empty directory (returns 0 notebooks collected, no errors)
+- [x] T005 Create `tests/e2e/test_eda_notebooks.py` with a parameterized e2e test using `nbmake` that discovers and executes all `.ipynb` files in `notebooks/eda/`, tagged `@pytest.mark.e2e`
+- [x] T006 Verify `pytest --nbmake notebooks/eda/ -v` command works on an empty directory (returns 0 notebooks collected, no errors) — confirms test runner is functional before notebooks exist (Red phase of TDD)
 
 **Checkpoint**: Test runner ready. Each notebook added in Phases 3–5 is immediately testable via `pytest --nbmake notebooks/eda/<name>.ipynb`.
 
@@ -51,15 +51,15 @@
 
 ### Implementation for User Story 1
 
-- [ ] T007 [P] [US1] Create `notebooks/eda/eda_cdc_places.ipynb` with Section 1 (load `data/raw/CDCPlaces.csv`, display shape, dtype table, null % per column, ZIP key check) and Section 3 (histogram per numeric column, frequency table per categorical ≤20 unique values; all charts titled and axis-labelled)
-- [ ] T008 [P] [US1] Create `notebooks/eda/eda_census_demographics.ipynb` with Section 1 (load `data/raw/Census-Demographics.csv`, same schema profiling) and Section 3 (distributions for all numeric/categorical columns)
-- [ ] T009 [P] [US1] Create `notebooks/eda/eda_census_housing_poverty.ipynb` with Section 1 (load `data/raw/Census-Housing&Poverty.csv`) and Section 3 (distributions)
-- [ ] T010 [P] [US1] Create `notebooks/eda/eda_fema.ipynb` with Section 1 (load `data/raw/FEMA.csv`) and Section 3 (distributions)
-- [ ] T011 [P] [US1] Create `notebooks/eda/eda_healthcare_access.ipynb` with Section 1 (load `data/raw/HealthCareAccess.csv`) and Section 3 (distributions)
-- [ ] T012 [P] [US1] Create `notebooks/eda/eda_healthcare_workers.ipynb` with Section 1 (load `data/raw/HealthCareWorkers.csv`) and Section 3 (distributions)
-- [ ] T013 [P] [US1] Create `notebooks/eda/eda_parks.ipynb` with Section 1 (load `data/raw/Parks.csv`) and Section 3 (distributions)
-- [ ] T014 [P] [US1] Create `notebooks/eda/eda_social_vulnerability.ipynb` with Section 1 (load `data/raw/SocialVulnerabilityIndex.csv`) and Section 3 (distributions)
-- [ ] T015 [P] [US1] Create `notebooks/eda/eda_usda_food_access.ipynb` with Section 1 (load `data/raw/USDA-FoodAccess.csv`) and Section 3 (distributions)
+- [x] T007 [P] [US1] Create `notebooks/eda/eda_cdc_places.ipynb` with Section 1 (load `data/raw/CDCPlaces.csv`, display shape, dtype table, null % per column, ZIP key check) and Section 3 (histogram per numeric column, frequency table per categorical ≤20 unique values; all charts titled and axis-labelled)
+- [x] T008 [P] [US1] Create `notebooks/eda/eda_census_demographics.ipynb` with Section 1 (load `data/raw/Census-Demographics.csv`, same schema profiling) and Section 3 (distributions for all numeric/categorical columns)
+- [x] T009 [P] [US1] Create `notebooks/eda/eda_census_housing_poverty.ipynb` with Section 1 (load `data/raw/Census-Housing&Poverty.csv`) and Section 3 (distributions)
+- [x] T010 [P] [US1] Create `notebooks/eda/eda_fema.ipynb` with Section 1 (load `data/raw/FEMA.csv`) and Section 3 (distributions)
+- [x] T011 [P] [US1] Create `notebooks/eda/eda_healthcare_access.ipynb` with Section 1 (load `data/raw/HealthCareAccess.csv`) and Section 3 (distributions)
+- [x] T012 [P] [US1] Create `notebooks/eda/eda_healthcare_workers.ipynb` with Section 1 (load `data/raw/HealthCareWorkers.csv`) and Section 3 (distributions)
+- [x] T013 [P] [US1] Create `notebooks/eda/eda_parks.ipynb` with Section 1 (load `data/raw/Parks.csv`) and Section 3 (distributions)
+- [x] T014 [P] [US1] Create `notebooks/eda/eda_social_vulnerability.ipynb` with Section 1 (load `data/raw/SocialVulnerabilityIndex.csv`) and Section 3 (distributions)
+- [x] T015 [P] [US1] Create `notebooks/eda/eda_usda_food_access.ipynb` with Section 1 (load `data/raw/USDA-FoodAccess.csv`) and Section 3 (distributions)
 
 **Checkpoint**: All 9 notebooks exist and pass `pytest --nbmake notebooks/eda/ -v`. User Story 1 is independently complete.
 
@@ -73,15 +73,15 @@
 
 ### Implementation for User Story 2
 
-- [ ] T016 [P] [US2] Add Section 2 to `notebooks/eda/eda_cdc_places.ipynb`: duplicate count cell, quality flag table (null_pct, dtype, flag: usable/needs_cleaning/too_sparse), IQR outlier table for all numeric columns (Q1, Q3, IQR, lower_fence, upper_fence, outlier_count, outlier_zips)
-- [ ] T017 [P] [US2] Add Section 2 to `notebooks/eda/eda_census_demographics.ipynb` (same structure as T016)
-- [ ] T018 [P] [US2] Add Section 2 to `notebooks/eda/eda_census_housing_poverty.ipynb` — note: flag ZIP code column if integer vs. string format inconsistency is detected
-- [ ] T019 [P] [US2] Add Section 2 to `notebooks/eda/eda_fema.ipynb`
-- [ ] T020 [P] [US2] Add Section 2 to `notebooks/eda/eda_healthcare_access.ipynb`
-- [ ] T021 [P] [US2] Add Section 2 to `notebooks/eda/eda_healthcare_workers.ipynb`
-- [ ] T022 [P] [US2] Add Section 2 to `notebooks/eda/eda_parks.ipynb`
-- [ ] T023 [P] [US2] Add Section 2 to `notebooks/eda/eda_social_vulnerability.ipynb`
-- [ ] T024 [P] [US2] Add Section 2 to `notebooks/eda/eda_usda_food_access.ipynb`
+- [x] T016 [P] [US2] Add Section 2 to `notebooks/eda/eda_cdc_places.ipynb`: duplicate count cell, quality flag table (null_pct, dtype, flag: usable/needs_cleaning/too_sparse), IQR outlier table for all numeric columns (Q1, Q3, IQR, lower_fence, upper_fence, outlier_count, outlier_zips)
+- [x] T017 [P] [US2] Add Section 2 to `notebooks/eda/eda_census_demographics.ipynb` (same structure as T016)
+- [x] T018 [P] [US2] Add Section 2 to `notebooks/eda/eda_census_housing_poverty.ipynb` — note: flag ZIP code column if integer vs. string format inconsistency is detected
+- [x] T019 [P] [US2] Add Section 2 to `notebooks/eda/eda_fema.ipynb`
+- [x] T020 [P] [US2] Add Section 2 to `notebooks/eda/eda_healthcare_access.ipynb`
+- [x] T021 [P] [US2] Add Section 2 to `notebooks/eda/eda_healthcare_workers.ipynb`
+- [x] T022 [P] [US2] Add Section 2 to `notebooks/eda/eda_parks.ipynb`
+- [x] T023 [P] [US2] Add Section 2 to `notebooks/eda/eda_social_vulnerability.ipynb`
+- [x] T024 [P] [US2] Add Section 2 to `notebooks/eda/eda_usda_food_access.ipynb`
 
 **Checkpoint**: All 9 notebooks pass `pytest --nbmake notebooks/eda/ -v` with Section 2 in place. A developer can determine column usability within 60 seconds. User Story 2 independently complete.
 
@@ -95,29 +95,34 @@
 
 ### Implementation for User Story 3
 
-- [ ] T025 [P] [US3] Add Section 4 to `notebooks/eda/eda_cdc_places.ipynb`: ranked bar chart of top/bottom 10 ZIPs by highest chronic disease prevalence rate; include Resource Desert relevance note
-- [ ] T026 [P] [US3] Add Section 4 to `notebooks/eda/eda_census_demographics.ipynb`: ranked bar chart by population density (pop per sq mile); include Resource Desert relevance note
-- [ ] T027 [P] [US3] Add Section 4 to `notebooks/eda/eda_census_housing_poverty.ipynb`: ranked bar chart by poverty rate (%); also show housing cost burden distribution; include Resource Desert relevance note
-- [ ] T028 [P] [US3] Add Section 4 to `notebooks/eda/eda_fema.ipynb`: ranked bar chart by composite disaster risk score; include Resource Desert relevance note
-- [ ] T029 [P] [US3] Add Section 4 to `notebooks/eda/eda_healthcare_access.ipynb`: ranked bar chart by uninsured rate (%); include Resource Desert relevance note
-- [ ] T030 [P] [US3] Add Section 4 to `notebooks/eda/eda_healthcare_workers.ipynb`: ranked bar chart by provider-to-population ratio (top and bottom 10 ZIPs); also show provider type breakdown bar chart; include Resource Desert relevance note
-- [ ] T031 [P] [US3] Add Section 4 to `notebooks/eda/eda_parks.ipynb`: ranked bar chart by park access score or park count per ZIP; include Resource Desert relevance note
-- [ ] T032 [P] [US3] Add Section 4 to `notebooks/eda/eda_social_vulnerability.ipynb`: ranked bar chart by composite SVI percentile; highlight top-quartile ZIPs; include Resource Desert relevance note
-- [ ] T033 [P] [US3] Add Section 4 to `notebooks/eda/eda_usda_food_access.ipynb`: ranked bar chart of most food-insecure ZIPs by low-income + low-access population share; show proportion of ZIPs classified as food deserts; include Resource Desert relevance note
+- [x] T025 [P] [US3] Add Section 4 to `notebooks/eda/eda_cdc_places.ipynb`: ranked bar chart of top/bottom 10 ZIPs by highest chronic disease prevalence rate; include Resource Desert relevance note
+- [x] T026 [P] [US3] Add Section 4 to `notebooks/eda/eda_census_demographics.ipynb`: ranked bar chart by population density (pop per sq mile); include Resource Desert relevance note
+- [x] T027 [P] [US3] Add Section 4 to `notebooks/eda/eda_census_housing_poverty.ipynb`: ranked bar chart by poverty rate (%); also show housing cost burden distribution; include Resource Desert relevance note
+- [x] T028 [P] [US3] Add Section 4 to `notebooks/eda/eda_fema.ipynb`: ranked bar chart by composite disaster risk score; include Resource Desert relevance note
+- [x] T029 [P] [US3] Add Section 4 to `notebooks/eda/eda_healthcare_access.ipynb`: ranked bar chart by uninsured rate (%); include Resource Desert relevance note
+- [x] T030 [P] [US3] Add Section 4 to `notebooks/eda/eda_healthcare_workers.ipynb`: ranked bar chart by provider-to-population ratio (top and bottom 10 ZIPs); also show provider type breakdown bar chart; include Resource Desert relevance note
+- [x] T031 [P] [US3] Add Section 4 to `notebooks/eda/eda_parks.ipynb`: ranked bar chart by park access score or park count per ZIP; include Resource Desert relevance note
+- [x] T032 [P] [US3] Add Section 4 to `notebooks/eda/eda_social_vulnerability.ipynb`: ranked bar chart by composite SVI percentile; highlight top-quartile ZIPs; include Resource Desert relevance note
+- [x] T033 [P] [US3] Add Section 4 to `notebooks/eda/eda_usda_food_access.ipynb`: ranked bar chart of most food-insecure ZIPs by low-income + low-access population share; show proportion of ZIPs classified as food deserts; include Resource Desert relevance note
 
 **Checkpoint**: All 9 notebooks have all 4 sections and pass `pytest --nbmake notebooks/eda/ -v`. All user stories complete.
 
 ---
 
-## Phase 6: Polish & Cross-Cutting Concerns
+## Phase 6: Quality Gates & Polish (Constitution Compliance)
 
-**Purpose**: Final validation, output clearing, and compliance with project conventions.
+**Purpose**: Final validation, quality gate enforcement, and output clearing per constitution v1.0.0.
 
-- [ ] T034 Run `pytest --nbmake notebooks/eda/ -v` against all 9 notebooks; confirm 9 notebooks collected, 0 errors (SC-001)
-- [ ] T035 Verify all 9 notebooks have exactly 4 section headings matching the required order: "Data Loading & Schema Summary", "Data Quality Assessment", "Univariate Distributions", "Domain-Relevant Analysis" (SC-002)
-- [ ] T036 [P] Clear all notebook outputs before final commit: `jupyter nbconvert --clear-output notebooks/eda/*.ipynb`
-- [ ] T037 [P] Run `ruff check notebooks/` and resolve any linting issues in notebook code cells
-- [ ] T038 Verify `specs/002-per-dataset-eda-notebooks/column-reference.md` (T004) matches column names actually found in each notebook's Section 1 schema output — update any discrepancies found
+**⚠️ ALL gates below MUST pass before the branch is considered complete.**
+
+- [ ] T034 Run `pytest --nbmake notebooks/eda/ -v` against all 9 notebooks; confirm 9 notebooks collected, 0 errors (SC-001, Constitution Principle III)
+- [x] T035 Verify all 9 notebooks have exactly 4 section headings matching the required order: "Data Loading & Schema Summary", "Data Quality Assessment", "Univariate Distributions", "Domain-Relevant Analysis" (SC-002)
+- [x] T036 [P] Run `nbqa ruff notebooks/eda/` — zero linting errors in all notebook code cells (FR-010, Constitution Principle I)
+- [x] T037 [P] Run `nbqa black notebooks/eda/ --check` — zero formatting violations; apply `nbqa black notebooks/eda/` to auto-fix if needed (FR-010, Constitution Principle I)
+- [x] T038 [P] Clear all notebook outputs before final commit: `jupyter nbconvert --clear-output notebooks/eda/*.ipynb` (FR-012, git convention)
+- [x] T039 Verify `specs/002-per-dataset-eda-notebooks/column-reference.md` (T004) matches column names actually found in each notebook's Section 1 schema output — update any discrepancies found
+- [x] T040 [P] Confirm no files under `data/raw/` appear in `git diff` — raw data MUST remain unmodified (Constitution Principle II)
+- [x] T041 Run `pytest tests/ -v -m "not e2e"` — confirm zero regressions in existing unit tests outside this feature
 
 ---
 

@@ -95,11 +95,17 @@ A user wants to drill into a specific service type (healthcare access, food acce
 - **FR-002**: The system MUST rank all Jacksonville ZIPs by Desert Score and display the top 10 most underserved.
 - **FR-003**: The system MUST produce at least one visualization showing a quantified relationship between preventative asset availability and a health outcome metric.
 - **FR-004**: The system MUST simulate adding each resource type (primary care, food access, park, insurance outreach) to the top-5 underserved ZIPs and output the projected Desert Score change per intervention, identifying the single highest-impact action.
-- **FR-005**: All data transformations MUST be logged with before/after record counts; no rows may be dropped silently.
-- **FR-006**: The system MUST write Desert Scores and intervention recommendations to `reports/outputs/`.
-- **FR-007**: All figures MUST be saved to `reports/figures/` at ≥150 DPI with descriptive filenames.
+- **FR-005**: All data transformations MUST be logged (using the `logging` module — `print()` is forbidden in `src/`) with before/after record counts; no rows may be dropped silently.
+- **FR-006**: The system MUST write Desert Scores and intervention recommendations to `reports/outputs/` as structured JSON or CSV files.
+- **FR-007**: All figures MUST be saved to `reports/figures/` at ≥150 DPI with descriptive filenames, a title, labelled axes (with units), and a legend where multi-series.
 - **FR-008**: The pipeline MUST be runnable end-to-end from raw data to final outputs with a single command.
 - **FR-009**: The prototype MUST be delivered as a Jupyter notebook. The choropleth map of Desert Scores MUST additionally be exported as a standalone HTML file to `reports/outputs/`.
+- **FR-010**: All `src/` code MUST pass `ruff check src/ tests/` and `black --check src/ tests/` with zero errors before the feature is considered complete.
+- **FR-011**: Every public function in `src/` MUST carry type hints on all parameters and return values, and a Google-style docstring with `Args`, `Returns`, and `Raises` sections.
+- **FR-012**: All file paths in `src/` MUST use `pathlib.Path`; no hardcoded path strings are permitted outside `src/config.py`.
+- **FR-013**: `np.random.seed(42)` and `random.seed(42)` MUST be set at the entry point of any code that involves randomness (train/test splits, sampling, model initialisation).
+- **FR-014**: Any predictive model reported as a deliverable MUST use cross-validation (minimum k=5 folds); single-split metrics are insufficient for reported outcomes.
+- **FR-015**: The test suite MUST achieve ≥70% line coverage across `src/` (measured by `pytest --cov=src --cov-fail-under=70`); coverage below this threshold is a hard block on completion.
 
 ### Key Entities
 
@@ -121,6 +127,30 @@ A user wants to drill into a specific service type (healthcare access, food acce
 - **SC-004**: The gap-closure simulation produces a ranked intervention table for the top-5 underserved ZIPs; the single highest-impact action shows a projected Desert Score improvement expressed as a percentage or point change.
 - **SC-005**: A non-technical judge can identify the single most underserved Jacksonville community and the proposed intervention in under 2 minutes of reviewing the prototype output.
 - **SC-006**: The full pipeline runs end-to-end without manual intervention and all unit tests pass.
+
+---
+
+## Constitution Compliance
+
+This feature is governed by the project constitution at `.specify/memory/constitution.md` (v1.0.0).
+The table below maps each principle to the specific requirements or constraints it imposes on this feature.
+
+| Principle | How It Applies Here |
+|---|---|
+| I. Python Code Quality | FR-010 (ruff/black), FR-011 (type hints + docstrings), FR-012 (pathlib + config.py) |
+| II. Data Science Reproducibility | FR-013 (seeds), 5-stage pipeline architecture in `src/` (ingestion → cleaning → features → models → visualization), FR-012 (immutable `data/raw/`) |
+| III. Test-First Development | FR-015 (≥70% coverage hard block); unit tests use synthetic fixture DataFrames only; e2e tests tagged `@pytest.mark.e2e` |
+| IV. Data Integrity & Observability | FR-005 (log all drops + record counts), FR-006 (metrics to `reports/outputs/`), FR-007 (figures ≥150 DPI, labelled) |
+| V. Simplicity & YAGNI | No speculative abstractions; no error handling beyond raw file reads and user-facing outputs |
+| VI. Analytical Rigour | FR-001 (operationalised Desert Score formula), FR-003 (evidence-backed causal chain), FR-014 (CV mandatory for models), FR-009 (ZIP code as explicit spatial identifier) |
+
+**Quality Gates** (all must pass before this feature is merged):
+
+1. `ruff check src/ tests/` — zero errors
+2. `black --check src/ tests/` — zero formatting violations
+3. `pytest tests/ -v -m "not e2e"` — all unit tests pass
+4. `pytest tests/ --cov=src --cov-fail-under=70` — coverage ≥ 70%
+5. No files under `data/raw/` appear in the git diff
 
 ---
 

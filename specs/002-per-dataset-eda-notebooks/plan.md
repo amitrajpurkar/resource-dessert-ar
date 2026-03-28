@@ -21,9 +21,23 @@ Produce 9 standalone Jupyter notebooks (one per raw data file in `data/raw/`) co
 
 ## Constitution Check
 
-*No constitution.md found — gate check skipped.*
+*Constitution: `.specify/memory/constitution.md` v1.0.0 — checked 2026-03-28.*
 
-All spec requirements are self-consistent. No architectural violations detected.
+| Gate | Status | Notes |
+|---|---|---|
+| **I. Python Code Quality** — ruff/black on all code cells | ✅ Pass | FR-010; Phase 6 enforces `ruff check notebooks/` and `black` via nbqa |
+| **I. Python Code Quality** — no `print()` in src/ | ✅ N/A | No new `src/` modules produced by this feature |
+| **II. Reproducibility** — seeds for any randomness | ✅ Pass | FR-011; no ML training in this feature; if any sampling occurs, seed(42) is required |
+| **II. Reproducibility** — raw data immutable | ✅ Pass | FR-008; notebooks read-only from `data/raw/` |
+| **II. Reproducibility** — 5-stage pipeline architecture | ✅ N/A | EDA notebooks are pre-pipeline exploration; no `src/` pipeline stages introduced |
+| **III. Test-First** — e2e tests written before notebooks | ✅ Pass | Phase 2 (T005–T006) creates test runner before Phase 3 notebooks begin |
+| **III. Test-First** — ≥70% coverage on src/ | ✅ N/A | No new `src/` code in this feature; coverage gate applies to existing `src/` baseline |
+| **IV. Data Integrity** — log row drops | ✅ N/A | Notebooks observe data only; no drops performed (flags are observational per FR-003) |
+| **IV. Data Integrity** — figures ≥150 DPI | ✅ N/A | EDA chart outputs are inline notebook outputs, not saved to `reports/figures/` |
+| **V. Simplicity** — no speculative abstractions | ✅ Pass | No shared helpers or utilities; notebooks are fully self-contained |
+| **VI. Analytical Rigour** — spatial IDs explicit | ✅ Pass | ZIP code presence and format checked in Section 1 of every notebook |
+
+**No violations.** No complexity justification required.
 
 ## Project Structure
 

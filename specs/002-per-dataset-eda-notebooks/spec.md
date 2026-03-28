@@ -107,6 +107,10 @@ A judge or teammate opens a notebook expecting to see not just raw summaries but
 - **FR-007**: All charts within notebooks MUST have a descriptive title and labelled axes (with units where applicable).
 - **FR-008**: Notebooks MUST NOT load or depend on any file outside `data/raw/` and `data/processed/`.
 - **FR-009**: Notebooks are for exploration only — no transformation logic that belongs in `src/` may be defined inline in a notebook cell.
+- **FR-010**: All Python code cells in notebooks MUST pass `ruff check` with zero errors; `black` formatting conventions MUST be applied to all code cells.
+- **FR-011**: If any notebook cell performs random sampling, `np.random.seed(42)` MUST be set in that cell before the sampling call.
+- **FR-012**: Notebook outputs MUST be cleared (`jupyter nbconvert --clear-output`) before committing to git.
+- **FR-013**: The e2e test suite (`tests/e2e/test_eda_notebooks.py`) MUST verify all 9 notebooks execute without errors; tests MUST be tagged `@pytest.mark.e2e` and excluded from the default `pytest` run.
 
 ### Key Entities
 
@@ -126,6 +130,30 @@ A judge or teammate opens a notebook expecting to see not just raw summaries but
 - **SC-003**: A reviewer can determine whether any given column is safe to use in the pipeline within 60 seconds of opening the relevant notebook, using the data quality summary alone.
 - **SC-004**: Every numeric column in every dataset has at least one distribution visualization produced by the notebooks.
 - **SC-005**: Each notebook's domain analysis section contains at least one finding that directly relates to the Resource Desert problem framing (supply/demand mismatch or health outcome).
+
+---
+
+## Constitution Compliance
+
+This feature is governed by the project constitution at `.specify/memory/constitution.md` (v1.0.0).
+Principles apply as follows for a notebooks-only feature (no new `src/` modules produced):
+
+| Principle | How It Applies Here |
+|---|---|
+| I. Python Code Quality | FR-010 (ruff/black on notebook code cells); no `print()` — use `display()` or direct cell output |
+| II. Data Science Reproducibility | FR-011 (seeds for any sampling); FR-008 (raw data read-only, no writes); no global state in notebooks |
+| III. Test-First Development | FR-013 (e2e test suite with `@pytest.mark.e2e`; written before notebooks); ≥70% coverage gate applies to `src/` — no new `src/` code in this feature, so gate is satisfied by the e2e suite itself |
+| IV. Data Integrity & Observability | FR-007 (titled, labelled charts); FR-003 (null rates and outlier counts explicitly reported) |
+| V. Simplicity & YAGNI | No helper utilities in notebooks; no imports of custom modules not already in requirements.txt |
+| VI. Analytical Rigour | FR-005 (domain analysis must name the metric and units); ZIP code as explicit geographic identifier checked in schema section per FR-002 |
+
+**Quality Gates** (all must pass before this feature is merged):
+
+1. `ruff check notebooks/` — zero errors in notebook code cells (via `nbqa ruff`)
+2. `pytest tests/ -v -m "not e2e"` — no regressions in existing unit tests
+3. `pytest --nbmake notebooks/eda/ -v` — all 9 notebooks execute without errors (`@pytest.mark.e2e`)
+4. `jupyter nbconvert --clear-output notebooks/eda/*.ipynb` — outputs cleared before commit
+5. No files under `data/raw/` appear in the git diff
 
 ---
 
