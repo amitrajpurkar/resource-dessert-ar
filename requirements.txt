@@ -12,3 +12,17 @@ pytest-cov>=4.1
 ruff>=0.4
 black>=24.0
 nbconvert>=7.0
+
+
+# Notebook testing (e2e)
+nbmake
+nbqa
+
+# Linting / formatting
+ruff
+black
+
+# Testing
+pytest
+pytest-cov
+

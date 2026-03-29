@@ -12,6 +12,11 @@ dist/
 build/
 .eggs/
 
+# Virtual environments
+.venv/
+venv/
+env/
+
 # Pytest / coverage
 .pytest_cache/
 .coverage
@@ -46,3 +51,7 @@ Thumbs.db
 
 # Logs
 *.log
+
+# Secrets / env
+.env
+.env.*
