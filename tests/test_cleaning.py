@@ -7,7 +7,12 @@ import pandas as pd
 import pytest
 
 from src import config as cfg
-from src.cleaning import _coerce_numerics, _drop_duplicates, _standardise_zip, clean_datasets
+from src.cleaning import (
+    _coerce_numerics,
+    _drop_duplicates,
+    _standardise_zip,
+    clean_datasets,
+)
 
 
 class TestStandardiseZip:
@@ -47,10 +52,12 @@ class TestDropDuplicates:
 
     def test_keeps_first_occurrence(self):
         """_drop_duplicates() keeps the first occurrence when deduplicating."""
-        df = pd.DataFrame({
-            cfg.COL_ZIP: ["32201", "32201"],
-            "value": [10, 99],
-        })
+        df = pd.DataFrame(
+            {
+                cfg.COL_ZIP: ["32201", "32201"],
+                "value": [10, 99],
+            }
+        )
         result = _drop_duplicates(df, "test")
         assert result["value"].iloc[0] == 10
 

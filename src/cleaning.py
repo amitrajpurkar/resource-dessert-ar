@@ -138,10 +138,16 @@ def _coerce_numerics(df: pd.DataFrame) -> pd.DataFrame:
     _NA_STRINGS: frozenset = frozenset({"N/A", "n/a", "NA", "na", "N/a", "-", "--", ""})
     result = {}
     for col in df.columns:
-        if not pd.api.types.is_numeric_dtype(df[col]) and not pd.api.types.is_bool_dtype(df[col]):
+        if not pd.api.types.is_numeric_dtype(
+            df[col]
+        ) and not pd.api.types.is_bool_dtype(df[col]):
             # Map known NA strings to float NaN before numeric coercion
             series = df[col].map(
-                lambda x: float("nan") if isinstance(x, str) and x.strip() in _NA_STRINGS else x
+                lambda x: (
+                    float("nan")
+                    if isinstance(x, str) and x.strip() in _NA_STRINGS
+                    else x
+                )
             )
             coerced = pd.to_numeric(series, errors="coerce")
             # Only replace if at least some values converted successfully

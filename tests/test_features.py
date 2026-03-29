@@ -45,6 +45,7 @@ class TestMergeDatasets:
     def test_returns_dataframe(self, all_raw_datasets):
         """merge_datasets() returns a DataFrame."""
         from src.cleaning import clean_datasets
+
         cleaned = clean_datasets(all_raw_datasets)
         result = merge_datasets(cleaned)
         assert isinstance(result, pd.DataFrame)
@@ -52,6 +53,7 @@ class TestMergeDatasets:
     def test_no_duplicate_zip_codes(self, all_raw_datasets):
         """Merged DataFrame has no duplicate zip_code values."""
         from src.cleaning import clean_datasets
+
         cleaned = clean_datasets(all_raw_datasets)
         result = merge_datasets(cleaned)
         assert result[cfg.COL_ZIP].nunique() == len(result)

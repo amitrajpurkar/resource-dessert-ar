@@ -185,7 +185,13 @@ def sample_fema_df() -> pd.DataFrame:
             ],
             cfg.COL_GEOID: ["32201", "32202", "32203", "32204", "32205"],
             cfg.COL_FEMA_RESILIENCE: [49.8, 49.8, 55.0, 60.0, 52.0],
-            cfg.COL_FEMA_ANNUAL_LOSS: [3_400_000, 4_800_000, 2_000_000, 3_000_000, 4_000_000],
+            cfg.COL_FEMA_ANNUAL_LOSS: [
+                3_400_000,
+                4_800_000,
+                2_000_000,
+                3_000_000,
+                4_000_000,
+            ],
             cfg.COL_FEMA_SOCIAL_VULN: [0.57, 0.51, 0.35, 0.45, 0.60],
         }
     )
@@ -248,7 +254,13 @@ def sample_desert_scores_df() -> pd.DataFrame:
             cfg.COL_SUPPLY_GAP_FOOD: [0.40, 0.35, 0.10, 0.85, 0.42],
             cfg.COL_SUPPLY_GAP_PARKS: [0.80, 0.70, 0.10, 0.75, 0.65],
             cfg.COL_SUPPLY_GAP_INSURANCE: [0.60, 0.70, 0.20, 0.15, 0.45],
-            cfg.COL_TOP_GAP_CATEGORY: ["parks", "insurance", "healthcare", "healthcare", "parks"],
+            cfg.COL_TOP_GAP_CATEGORY: [
+                "parks",
+                "insurance",
+                "healthcare",
+                "healthcare",
+                "parks",
+            ],
             cfg.COL_TOTAL_POPULATION: [5000, 6000, 7000, 8000, 9000],
             cfg.COL_POVERTY_RATE: [0.16, 0.23, 0.086, 0.038, 0.133],
         }

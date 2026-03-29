@@ -7,7 +7,7 @@ import pandas as pd
 import pytest
 
 from src import config as cfg
-from src.ingestion import _load_csv, _load_xlsx, load_raw_datasets
+from src.ingestion import _load_csv, load_raw_datasets
 
 
 class TestLoadRawDatasets:
@@ -26,11 +26,14 @@ class TestLoadRawDatasets:
             cfg.USDA_FOOD_ACCESS_PATH,
         ]:
             stub = tmp_path / path.name
-            stub.write_text("feature id,feature label,shid,geoid,col1\n1,ZIP Code 32201,x,32201,1.0\n")
+            stub.write_text(
+                "feature id,feature label,shid,geoid,col1\n1,ZIP Code 32201,x,32201,1.0\n"
+            )
 
         stub_xlsx = tmp_path / cfg.METADATA_PATH.name
         # write a minimal xlsx via openpyxl
         import openpyxl
+
         wb = openpyxl.Workbook()
         ws = wb.active
         ws.append(["Variables", "Source", "Link", "Data File Name"])
@@ -39,14 +42,28 @@ class TestLoadRawDatasets:
 
         # Monkeypatch config paths to point to tmp_path stubs
         monkeypatch.setattr(cfg, "CDC_PLACES_PATH", tmp_path / cfg.CDC_PLACES_PATH.name)
-        monkeypatch.setattr(cfg, "CENSUS_DEMOGRAPHICS_PATH", tmp_path / cfg.CENSUS_DEMOGRAPHICS_PATH.name)
-        monkeypatch.setattr(cfg, "CENSUS_HOUSING_POVERTY_PATH", tmp_path / cfg.CENSUS_HOUSING_POVERTY_PATH.name)
+        monkeypatch.setattr(
+            cfg,
+            "CENSUS_DEMOGRAPHICS_PATH",
+            tmp_path / cfg.CENSUS_DEMOGRAPHICS_PATH.name,
+        )
+        monkeypatch.setattr(
+            cfg,
+            "CENSUS_HOUSING_POVERTY_PATH",
+            tmp_path / cfg.CENSUS_HOUSING_POVERTY_PATH.name,
+        )
         monkeypatch.setattr(cfg, "FEMA_PATH", tmp_path / cfg.FEMA_PATH.name)
-        monkeypatch.setattr(cfg, "HEALTHCARE_ACCESS_PATH", tmp_path / cfg.HEALTHCARE_ACCESS_PATH.name)
-        monkeypatch.setattr(cfg, "HEALTHCARE_WORKERS_PATH", tmp_path / cfg.HEALTHCARE_WORKERS_PATH.name)
+        monkeypatch.setattr(
+            cfg, "HEALTHCARE_ACCESS_PATH", tmp_path / cfg.HEALTHCARE_ACCESS_PATH.name
+        )
+        monkeypatch.setattr(
+            cfg, "HEALTHCARE_WORKERS_PATH", tmp_path / cfg.HEALTHCARE_WORKERS_PATH.name
+        )
         monkeypatch.setattr(cfg, "PARKS_PATH", tmp_path / cfg.PARKS_PATH.name)
         monkeypatch.setattr(cfg, "SVI_PATH", tmp_path / cfg.SVI_PATH.name)
-        monkeypatch.setattr(cfg, "USDA_FOOD_ACCESS_PATH", tmp_path / cfg.USDA_FOOD_ACCESS_PATH.name)
+        monkeypatch.setattr(
+            cfg, "USDA_FOOD_ACCESS_PATH", tmp_path / cfg.USDA_FOOD_ACCESS_PATH.name
+        )
         monkeypatch.setattr(cfg, "METADATA_PATH", stub_xlsx)
 
         result = load_raw_datasets()
@@ -78,10 +95,13 @@ class TestLoadRawDatasets:
             "USDA_FOOD_ACCESS_PATH",
         ]:
             stub = tmp_path / getattr(cfg, path_attr).name
-            stub.write_text("feature id,feature label,shid,geoid,col1\n1,ZIP Code 32201,x,32201,1.0\n")
+            stub.write_text(
+                "feature id,feature label,shid,geoid,col1\n1,ZIP Code 32201,x,32201,1.0\n"
+            )
             monkeypatch.setattr(cfg, path_attr, stub)
 
         import openpyxl
+
         stub_xlsx = tmp_path / cfg.METADATA_PATH.name
         wb = openpyxl.Workbook()
         ws = wb.active

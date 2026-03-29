@@ -64,9 +64,9 @@ def run_gap_closure_simulation(
     random.seed(42)
 
     # Identify top-N ZIPs (rank 1 = most underserved)
-    top_zips = (
-        desert_scores_df.nsmallest(top_n, cfg.COL_DESERT_RANK)[cfg.COL_ZIP].tolist()
-    )
+    top_zips = desert_scores_df.nsmallest(top_n, cfg.COL_DESERT_RANK)[
+        cfg.COL_ZIP
+    ].tolist()
 
     # Pre-compute 25th-percentile target for each supply gap column
     p25_targets = {
@@ -78,15 +78,13 @@ def run_gap_closure_simulation(
     # Population lookup
     pop_lookup: dict = {}
     if cfg.COL_TOTAL_POPULATION in merged_df.columns:
-        pop_lookup = (
-            merged_df.set_index(cfg.COL_ZIP)[cfg.COL_TOTAL_POPULATION]
-            .to_dict()
-        )
+        pop_lookup = merged_df.set_index(cfg.COL_ZIP)[
+            cfg.COL_TOTAL_POPULATION
+        ].to_dict()
     elif cfg.COL_TOTAL_POPULATION in desert_scores_df.columns:
-        pop_lookup = (
-            desert_scores_df.set_index(cfg.COL_ZIP)[cfg.COL_TOTAL_POPULATION]
-            .to_dict()
-        )
+        pop_lookup = desert_scores_df.set_index(cfg.COL_ZIP)[
+            cfg.COL_TOTAL_POPULATION
+        ].to_dict()
 
     rows = []
     for zip_code in top_zips:
@@ -130,7 +128,9 @@ def run_gap_closure_simulation(
             simulated_score = float(np.clip(simulated_score, 0.0, 100.0))
             score_improvement = max(0.0, current_score - simulated_score)
             pct_improvement = (
-                (score_improvement / current_score * 100.0) if current_score > 0 else 0.0
+                (score_improvement / current_score * 100.0)
+                if current_score > 0
+                else 0.0
             )
             pct_improvement = float(np.clip(pct_improvement, 0.0, 100.0))
 
@@ -170,9 +170,11 @@ def rank_interventions(interventions_df: pd.DataFrame) -> pd.DataFrame:
         Sorted DataFrame with exactly one row where
         ``is_highest_impact == True``.
     """
-    df = interventions_df.copy().sort_values(
-        "score_improvement", ascending=False
-    ).reset_index(drop=True)
+    df = (
+        interventions_df.copy()
+        .sort_values("score_improvement", ascending=False)
+        .reset_index(drop=True)
+    )
 
     df["is_highest_impact"] = False
     df.loc[0, "is_highest_impact"] = True

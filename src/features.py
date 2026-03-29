@@ -4,7 +4,6 @@ Merges cleaned datasets, constructs the demand-weighted Resource Desert Score,
 and provides helper functions for category filtering and correlation analysis.
 """
 
-from pathlib import Path
 from typing import Dict
 
 import pandas as pd
@@ -77,21 +76,41 @@ def merge_datasets(cleaned: Dict[str, pd.DataFrame]) -> pd.DataFrame:
     frames.append(
         _subset(
             cfg.KEY_HEALTHCARE_ACCESS,
-            [cfg.COL_UNINSURED_COUNT, cfg.COL_INSURED_COUNT, cfg.COL_MENTAL_HEALTH_PROVIDERS],
+            [
+                cfg.COL_UNINSURED_COUNT,
+                cfg.COL_INSURED_COUNT,
+                cfg.COL_MENTAL_HEALTH_PROVIDERS,
+            ],
         )
     )
     frames.append(
-        _subset(cfg.KEY_PARKS, [cfg.COL_PARK_COUNT, cfg.COL_PARK_COVERAGE_PCT, cfg.COL_PARK_AREA_ACRES])
+        _subset(
+            cfg.KEY_PARKS,
+            [cfg.COL_PARK_COUNT, cfg.COL_PARK_COVERAGE_PCT, cfg.COL_PARK_AREA_ACRES],
+        )
     )
     frames.append(
         _subset(
             cfg.KEY_USDA,
-            [cfg.COL_FOOD_LOW_ACCESS_1_MILE, cfg.COL_FOOD_LOW_ACCESS_20_MILE, cfg.COL_FOOD_LOW_INCOME],
+            [
+                cfg.COL_FOOD_LOW_ACCESS_1_MILE,
+                cfg.COL_FOOD_LOW_ACCESS_20_MILE,
+                cfg.COL_FOOD_LOW_INCOME,
+            ],
         )
     )
-    frames.append(_subset(cfg.KEY_SVI, [cfg.COL_SVI_SCORE, cfg.COL_SVI_VULNERABLE_FACTORS]))
     frames.append(
-        _subset(cfg.KEY_FEMA, [cfg.COL_FEMA_RESILIENCE, cfg.COL_FEMA_ANNUAL_LOSS, cfg.COL_FEMA_SOCIAL_VULN])
+        _subset(cfg.KEY_SVI, [cfg.COL_SVI_SCORE, cfg.COL_SVI_VULNERABLE_FACTORS])
+    )
+    frames.append(
+        _subset(
+            cfg.KEY_FEMA,
+            [
+                cfg.COL_FEMA_RESILIENCE,
+                cfg.COL_FEMA_ANNUAL_LOSS,
+                cfg.COL_FEMA_SOCIAL_VULN,
+            ],
+        )
     )
 
     # Outer-join iteratively on zip_code
@@ -150,7 +169,9 @@ def merge_datasets(cleaned: Dict[str, pd.DataFrame]) -> pd.DataFrame:
         if n_null > 0:
             median_val = merged[col].median()
             merged[col] = merged[col].fillna(median_val)
-            logger.info("Imputed %d nulls in '%s' with median %.4f.", n_null, col, median_val)
+            logger.info(
+                "Imputed %d nulls in '%s' with median %.4f.", n_null, col, median_val
+            )
 
     # Save processed file
     cfg.DATA_PROCESSED_DIR.mkdir(parents=True, exist_ok=True)
@@ -208,7 +229,9 @@ def compute_desert_score(merged_df: pd.DataFrame) -> pd.DataFrame:
 
     # Supply gaps (0 = no gap, 1 = maximum gap)
     if cfg.COL_PRIMARY_CARE_RATIO in df.columns:
-        df[cfg.COL_SUPPLY_GAP_HEALTHCARE] = 1.0 - _minmax(df[cfg.COL_PRIMARY_CARE_RATIO])
+        df[cfg.COL_SUPPLY_GAP_HEALTHCARE] = 1.0 - _minmax(
+            df[cfg.COL_PRIMARY_CARE_RATIO]
+        )
     else:
         df[cfg.COL_SUPPLY_GAP_HEALTHCARE] = 0.0
 
@@ -228,9 +251,21 @@ def compute_desert_score(merged_df: pd.DataFrame) -> pd.DataFrame:
         df[cfg.COL_SUPPLY_GAP_INSURANCE] = 0.0
 
     # Demand factor
-    poverty = df[cfg.COL_POVERTY_RATE] if cfg.COL_POVERTY_RATE in df.columns else pd.Series(0.0, index=df.index)
-    mental_h = (df[cfg.COL_POOR_MENTAL_HEALTH] / 100.0) if cfg.COL_POOR_MENTAL_HEALTH in df.columns else pd.Series(0.0, index=df.index)
-    obesity = (df[cfg.COL_OBESITY] / 100.0) if cfg.COL_OBESITY in df.columns else pd.Series(0.0, index=df.index)
+    poverty = (
+        df[cfg.COL_POVERTY_RATE]
+        if cfg.COL_POVERTY_RATE in df.columns
+        else pd.Series(0.0, index=df.index)
+    )
+    mental_h = (
+        (df[cfg.COL_POOR_MENTAL_HEALTH] / 100.0)
+        if cfg.COL_POOR_MENTAL_HEALTH in df.columns
+        else pd.Series(0.0, index=df.index)
+    )
+    obesity = (
+        (df[cfg.COL_OBESITY] / 100.0)
+        if cfg.COL_OBESITY in df.columns
+        else pd.Series(0.0, index=df.index)
+    )
 
     disease_burden = (mental_h + obesity) / 2.0
     df[cfg.COL_DISEASE_BURDEN] = disease_burden
@@ -316,7 +351,10 @@ def compute_health_outcome_correlation(merged_df: pd.DataFrame) -> pd.DataFrame:
     rows = []
     for asset_name, asset_col in asset_cols.items():
         for outcome_name, outcome_col in outcome_cols.items():
-            if asset_col not in merged_df.columns or outcome_col not in merged_df.columns:
+            if (
+                asset_col not in merged_df.columns
+                or outcome_col not in merged_df.columns
+            ):
                 continue
             pair = merged_df[[asset_col, outcome_col]].dropna()
             if len(pair) < 3:
@@ -327,7 +365,9 @@ def compute_health_outcome_correlation(merged_df: pd.DataFrame) -> pd.DataFrame:
                 )
                 continue
             r = pair[asset_col].corr(pair[outcome_col])
-            rows.append({"asset": asset_name, "outcome": outcome_name, "pearson_r": round(r, 4)})
+            rows.append(
+                {"asset": asset_name, "outcome": outcome_name, "pearson_r": round(r, 4)}
+            )
             logger.info("Correlation %s × %s: r = %.4f", asset_name, outcome_name, r)
 
     corr_df = pd.DataFrame(rows, columns=["asset", "outcome", "pearson_r"])
@@ -371,6 +411,7 @@ def filter_by_service_category(
 # ---------------------------------------------------------------------------
 # Internal helpers
 # ---------------------------------------------------------------------------
+
 
 def _minmax(series: pd.Series) -> pd.Series:
     """Min-max normalise a Series to [0, 1].

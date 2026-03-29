@@ -36,9 +36,8 @@ def plot_desert_scores_bar_chart(
     figures_dir = Path(figures_dir)
     figures_dir.mkdir(parents=True, exist_ok=True)
 
-    top = (
-        desert_scores_df.nsmallest(top_n, cfg.COL_DESERT_RANK)
-        .sort_values(cfg.COL_DESERT_RANK, ascending=False)
+    top = desert_scores_df.nsmallest(top_n, cfg.COL_DESERT_RANK).sort_values(
+        cfg.COL_DESERT_RANK, ascending=False
     )
 
     fig, ax = plt.subplots(figsize=(10, 6))
@@ -110,7 +109,9 @@ def create_choropleth_map(
     outputs_dir = Path(outputs_dir)
     outputs_dir.mkdir(parents=True, exist_ok=True)
 
-    m = folium.Map(location=[30.3322, -81.6557], zoom_start=11, tiles="CartoDB positron")
+    m = folium.Map(
+        location=[30.3322, -81.6557], zoom_start=11, tiles="CartoDB positron"
+    )
 
     choropleth = folium.Choropleth(
         geo_data=str(geojson_path),
@@ -125,11 +126,6 @@ def create_choropleth_map(
         nan_fill_color="lightgrey",
     )
     choropleth.add_to(m)
-
-    # Build tooltip from GeoJSON + score lookup
-    score_lookup = desert_scores_df.set_index(cfg.COL_ZIP)[
-        [cfg.COL_DESERT_SCORE, cfg.COL_DESERT_RANK, cfg.COL_TOP_GAP_CATEGORY]
-    ].to_dict(orient="index")
 
     def _style(feature: dict) -> dict:
         return {"fillOpacity": 0, "weight": 0}
@@ -244,7 +240,9 @@ def plot_intervention_impact_heatmap(
     )
 
     # Star the highest-impact cell
-    best = interventions_df.loc[interventions_df["is_highest_impact"].astype(bool).idxmax()]
+    best = interventions_df.loc[
+        interventions_df["is_highest_impact"].astype(bool).idxmax()
+    ]
     row_idx = list(pivot.index).index(best["zip_code"])
     col_idx = list(pivot.columns).index(best["resource_type"])
     ax.text(
@@ -304,19 +302,37 @@ def plot_category_view(
     }
     gap_col = gap_col_map.get(category, cfg.COL_DESERT_SCORE)
 
-    plot_cols = [c for c in [cfg.COL_ZIP, gap_col, cfg.COL_POVERTY_RATE] if c in category_df.columns]
+    plot_cols = [
+        c
+        for c in [cfg.COL_ZIP, gap_col, cfg.COL_POVERTY_RATE]
+        if c in category_df.columns
+    ]
     plot_df = category_df[plot_cols].dropna()
 
     x = range(len(plot_df))
     width = 0.4
 
     fig, ax = plt.subplots(figsize=(12, 5))
-    ax.bar([i - width / 2 for i in x], plot_df[gap_col], width=width, label=f"{category} gap (0–1)", color="#d73027")
+    ax.bar(
+        [i - width / 2 for i in x],
+        plot_df[gap_col],
+        width=width,
+        label=f"{category} gap (0–1)",
+        color="#d73027",
+    )
     if cfg.COL_POVERTY_RATE in plot_df.columns:
-        ax.bar([i + width / 2 for i in x], plot_df[cfg.COL_POVERTY_RATE], width=width, label="Poverty Rate (0–1)", color="#fee090")
+        ax.bar(
+            [i + width / 2 for i in x],
+            plot_df[cfg.COL_POVERTY_RATE],
+            width=width,
+            label="Poverty Rate (0–1)",
+            color="#fee090",
+        )
 
     ax.set_xticks(list(x))
-    ax.set_xticklabels(plot_df[cfg.COL_ZIP].astype(str), rotation=45, ha="right", fontsize=8)
+    ax.set_xticklabels(
+        plot_df[cfg.COL_ZIP].astype(str), rotation=45, ha="right", fontsize=8
+    )
     ax.set_xlabel("ZIP Code", fontsize=11)
     ax.set_ylabel("Score (0–1)", fontsize=11)
     ax.set_title(

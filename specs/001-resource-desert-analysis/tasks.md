@@ -125,14 +125,14 @@
 
 **Purpose**: End-to-end notebook, e2e test, coverage gate, linting pass, notebook cleanup.
 
-- [ ] T027 [P] Write failing unit tests for visualization functions in `tests/test_visualization.py`: mock `matplotlib.pyplot.savefig` and `folium.Map.save`; assert each plot function calls save with a path in `reports/figures/` or `reports/outputs/`; assert figures have titles and axis labels
-- [ ] T028 Create `notebooks/resource_desert_analysis.ipynb`: end-to-end notebook with markdown narrative cells; orchestrate all 5 pipeline stages in order; display top-10 Desert Scores table, embedded choropleth map, correlation chart, intervention recommendations summary
-- [ ] T029 Write `tests/e2e/test_pipeline_e2e.py` tagged `@pytest.mark.e2e`: run full pipeline on `data/raw/`; assert `reports/outputs/desert_scores.csv` exists with expected columns; assert `reports/outputs/intervention_recommendations.json` exists with 20 rows; assert `reports/outputs/resource_desert_map.html` is a non-empty file
-- [ ] T030 [P] Run `ruff check src/ tests/` and fix all violations — zero errors required (FR-010)
-- [ ] T031 [P] Run `black src/ tests/` to auto-format — zero formatting violations required (FR-010)
-- [ ] T032 Run `pytest tests/ -v -m "not e2e"` and confirm all unit tests pass (FR-015 gate 3)
-- [ ] T033 Run `pytest tests/ --cov=src --cov-fail-under=70 --cov-report=term-missing` and confirm coverage ≥ 70% (FR-015 hard gate)
-- [ ] T034 Clear all cell outputs in `notebooks/resource_desert_analysis.ipynb` before final commit (`jupyter nbconvert --ClearOutputPreprocessor.enabled=True`)
+- [x] T027 [P] Write failing unit tests for visualization functions in `tests/test_visualization.py`: mock `matplotlib.pyplot.savefig` and `folium.Map.save`; assert each plot function calls save with a path in `reports/figures/` or `reports/outputs/`; assert figures have titles and axis labels
+- [x] T028 Create `notebooks/resource_desert_analysis.ipynb`: end-to-end notebook with markdown narrative cells; orchestrate all 5 pipeline stages in order; display top-10 Desert Scores table, embedded choropleth map, correlation chart, intervention recommendations summary
+- [x] T029 Write `tests/e2e/test_pipeline_e2e.py` tagged `@pytest.mark.e2e`: run full pipeline on `data/raw/`; assert `reports/outputs/desert_scores.csv` exists with expected columns; assert `reports/outputs/intervention_recommendations.json` exists with 20 rows; assert `reports/outputs/resource_desert_map.html` is a non-empty file
+- [x] T030 [P] Run `ruff check src/ tests/` and fix all violations — zero errors required (FR-010)
+- [x] T031 [P] Run `black src/ tests/` to auto-format — zero formatting violations required (FR-010)
+- [x] T032 Run `pytest tests/ -v -m "not e2e"` and confirm all unit tests pass (FR-015 gate 3)
+- [x] T033 Run `pytest tests/ --cov=src --cov-fail-under=70 --cov-report=term-missing` and confirm coverage ≥ 70% (FR-015 hard gate)
+- [x] T034 Clear all cell outputs in `notebooks/resource_desert_analysis.ipynb` before final commit (`jupyter nbconvert --ClearOutputPreprocessor.enabled=True`)
 
 ---
 

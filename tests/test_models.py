@@ -35,7 +35,9 @@ def sample_interventions_df() -> pd.DataFrame:
 
 
 class TestRunGapClosureSimulation:
-    def test_returns_top_n_times_4_rows(self, sample_desert_scores_df, sample_merged_df):
+    def test_returns_top_n_times_4_rows(
+        self, sample_desert_scores_df, sample_merged_df
+    ):
         """run_gap_closure_simulation() returns exactly top_n × 4 rows."""
         result = run_gap_closure_simulation(
             sample_desert_scores_df, sample_merged_df, top_n=3
@@ -49,14 +51,18 @@ class TestRunGapClosureSimulation:
         )
         assert isinstance(result, pd.DataFrame)
 
-    def test_score_improvement_non_negative(self, sample_desert_scores_df, sample_merged_df):
+    def test_score_improvement_non_negative(
+        self, sample_desert_scores_df, sample_merged_df
+    ):
         """score_improvement is >= 0 for all rows (simulation never worsens score)."""
         result = run_gap_closure_simulation(
             sample_desert_scores_df, sample_merged_df, top_n=5
         )
         assert (result["score_improvement"] >= 0).all()
 
-    def test_pct_improvement_in_valid_range(self, sample_desert_scores_df, sample_merged_df):
+    def test_pct_improvement_in_valid_range(
+        self, sample_desert_scores_df, sample_merged_df
+    ):
         """pct_improvement values are all in [0, 100]."""
         result = run_gap_closure_simulation(
             sample_desert_scores_df, sample_merged_df, top_n=5

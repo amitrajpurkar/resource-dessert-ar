@@ -102,8 +102,7 @@ def _load_xlsx(path: Path, key: str) -> pd.DataFrame:
     """
     if not path.exists():
         raise FileNotFoundError(
-            f"Required metadata file not found: {path.name} "
-            f"(expected at {path})."
+            f"Required metadata file not found: {path.name} " f"(expected at {path})."
         )
 
     df = pd.read_excel(path, sheet_name=0)
