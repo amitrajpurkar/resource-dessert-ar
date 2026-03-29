@@ -1,8 +1,12 @@
 # Python
 __pycache__/
-*.pyc
+*.py[cod]
 *.pyo
 *.pyd
+.Python
+.venv/
+venv/
+env/
 *.egg-info/
 dist/
 build/
@@ -13,29 +17,40 @@ build/
 venv/
 env/
 
+# Pytest / coverage
+.pytest_cache/
+.coverage
+coverage.xml
+htmlcov/
+
 # Jupyter
 .ipynb_checkpoints/
-*.ipynb_checkpoints
+*.ipynb_checkpoints/
 
-# Data — processed outputs (raw is version-controlled read-only)
+# Data — never commit large raw data
+data/raw/*.csv
+data/raw/*.xlsx
+data/raw/*.geojson
 data/processed/
 data/outputs/
 
-# Reports outputs (generated artefacts)
+# Reports (generated outputs)
 reports/figures/
 reports/outputs/
 
-# Coverage
-.coverage
-htmlcov/
-.pytest_cache/
-
-# macOS
+# OS
 .DS_Store
+Thumbs.db
+*.tmp
+*.swp
 
 # IDE
 .vscode/
 .idea/
+*.iml
+
+# Logs
+*.log
 
 # Secrets / env
 .env
