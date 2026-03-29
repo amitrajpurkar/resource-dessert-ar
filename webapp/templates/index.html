@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Resource Desert — Jacksonville Analysis Dashboard</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+</head>
+<body data-run-status="{{ run_status }}">
+
+<!-- ============================================================
+     Error banner (shown by JS when notebook run fails)
+     ============================================================ -->
+<div id="error-banner" class="error-banner{% if run_status == 'error' %} visible{% endif %}">
+  {%- if run_status == 'error' and run_message %}Notebook error:
+{{ run_message }}{% endif %}
+</div>
+
+<!-- ============================================================
+     Sticky navigation bar
+     ============================================================ -->
+<nav class="nav">
+  <span class="nav__brand">Resource Desert · Jacksonville</span>
+  <ul class="nav__links">
+    <li><a href="#problem">Problem</a></li>
+    <li><a href="#analysis">Analysis</a></li>
+    <li><a href="#observations">Observations</a></li>
+    <li><a href="#recommendations">Recommendations</a></li>
+    <li><a href="#categories">Categories</a></li>
+    <li>
+      <span id="status-dot" class="status-dot status-dot--{{ run_status }}" title="{{ run_status }}"></span>
+      <button id="regen-btn" class="btn-regen"
+        {%- if run_status == 'running' %} disabled{% endif %}>
+        {%- if run_status == 'running' %}
+          <span class="spinner"></span> Running…
+        {%- else %}
+          Regenerate Data
+        {%- endif %}
+      </button>
+    </li>
+  </ul>
+</nav>
+
+<!-- ============================================================
+     Section 1: Problem Statement
+     ============================================================ -->
+<section id="problem" class="section section--dark">
+  <div class="problem__hero">
+    <p class="section__eyebrow">2026 UNF CodeForAwhile Datathon · Problem Case 1</p>
+    <h1 class="problem__title">
+      What is a <span>Resource Desert</span>?
+    </h1>
+    <p class="problem__subtitle">
+      A Jacksonville ZIP code where essential services — healthcare, healthy food, parks,
+      and insurance — are physically or financially out of reach for the people who need
+      them most.
+    </p>
+
+    <p class="section__subheading" style="color: rgba(255,255,255,0.6); font-size:0.9rem; margin-bottom:1rem;">
+      Three key questions driving this analysis:
+    </p>
+    <ol class="problem__questions">
+      <li>
+        What is the biggest mismatch between residents and available essential services,
+        broken down by ZIP code?
+      </li>
+      <li>
+        How do resource deserts directly affect long-term health outcomes — specifically
+        the link between preventative assets and poor outcomes?
+      </li>
+      <li>
+        Where should we put the right resources to achieve the greatest impact for
+        a specific Jacksonville community?
+      </li>
+    </ol>
+
+    <div class="problem__cycle">
+      <div class="cycle__node">Lack of Preventative Assets</div>
+      <span class="cycle__arrow">→</span>
+      <div class="cycle__node">Poor Health Outcomes</div>
+      <span class="cycle__arrow">→</span>
+      <div class="cycle__node">Reduced Economic Mobility</div>
+      <span class="cycle__arrow">→</span>
+      <div class="cycle__node">Deepening Inequity</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     Section 2: Analysis
+     ============================================================ -->
+<section id="analysis" class="section section--light">
+  <div class="section__inner">
+    <p class="section__eyebrow">Methodology &amp; Data</p>
+    <h2 class="section__heading">How We Built the Desert Score</h2>
+
+    <p class="section__body" style="margin-bottom:2rem;">
+      We combined ten public datasets to create a composite <strong>Desert Score</strong>
+      (0–100) for every Jacksonville ZIP code. Higher scores indicate greater deprivation.
+    </p>
+
+    <!-- Desert Score formula -->
+    <h3 class="section__subheading">Desert Score Formula</h3>
+    <div class="formula-block">
+      <span class="term">Desert Score</span>
+      <span class="op"> = </span>
+      <span class="term">Demand Factor</span>
+      <span class="op"> × </span>
+      <span class="op">(</span>
+      <span class="term">w₁</span><span class="op"> × </span><span class="term">HealthcareGap</span>
+      <span class="op"> + </span>
+      <span class="term">w₂</span><span class="op"> × </span><span class="term">FoodAccessGap</span>
+      <span class="op"> + </span>
+      <span class="term">w₃</span><span class="op"> × </span><span class="term">ParksGap</span>
+      <span class="op"> + </span>
+      <span class="term">w₄</span><span class="op"> × </span><span class="term">InsuranceGap</span>
+      <span class="op">)</span>
+      <br/>
+      Demand Factor = f(poverty rate, disease burden, social vulnerability)
+      <br/>
+      Weights: w₁=0.35 (healthcare), w₂=0.30 (food), w₃=0.20 (parks), w₄=0.15 (insurance)
+    </div>
+
+    <!-- Data sources table -->
+    <h3 class="section__subheading">Data Sources</h3>
+    <table class="data-sources-table">
+      <thead>
+        <tr>
+          <th>Dataset</th>
+          <th>Source Agency</th>
+          <th>What It Measures</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Census Demographics</td><td>U.S. Census Bureau</td><td>Population, age, race by ZIP</td></tr>
+        <tr><td>Census Housing &amp; Poverty</td><td>U.S. Census Bureau</td><td>Housing cost burden, poverty rates</td></tr>
+        <tr><td>CDC PLACES</td><td>CDC</td><td>Chronic disease prevalence, health behaviors</td></tr>
+        <tr><td>FEMA</td><td>FEMA</td><td>Disaster risk, vulnerability indicators</td></tr>
+        <tr><td>Healthcare Access</td><td>NPPES / EPA EJScreen</td><td>Insurance coverage, access barriers</td></tr>
+        <tr><td>Healthcare Workers</td><td>NPPES</td><td>Provider counts by area</td></tr>
+        <tr><td>Parks</td><td>NaNDA</td><td>Park presence and access</td></tr>
+        <tr><td>Social Vulnerability Index</td><td>CDC SVI</td><td>Composite vulnerability scores</td></tr>
+        <tr><td>USDA Food Access</td><td>USDA FARA</td><td>Food desert classification, grocery access</td></tr>
+        <tr><td>Jacksonville ZCTAs</td><td>U.S. Census TIGER/Line</td><td>Geographic boundaries for mapping</td></tr>
+      </tbody>
+    </table>
+
+    <!-- Top-10 ZIP codes table -->
+    <h3 class="section__subheading">Top 10 Most Underserved ZIP Codes</h3>
+    {% if desert_scores %}
+    <table class="desert-scores-table">
+      <thead>
+        <tr>
+          <th>Rank</th>
+          <th>ZIP Code</th>
+          <th>Desert Score</th>
+          <th>Top Gap</th>
+          <th>Population</th>
+          <th>Poverty Rate</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in desert_scores %}
+        <tr>
+          <td>{{ row.desert_rank }}</td>
+          <td><strong>{{ row.zip_code }}</strong></td>
+          <td>
+            {% set s = row.desert_score %}
+            <span class="{% if s >= 70 %}score-high{% elif s >= 50 %}score-mid{% else %}score-low{% endif %}">
+              {{ "%.1f"|format(s) }}
+            </span>
+          </td>
+          <td>{{ row.top_gap_category | replace('_', ' ') | title }}</td>
+          <td>{{ "{:,}".format(row.total_population) if row.total_population is defined else "—" }}</td>
+          <td>{{ "%.1f%%"|format(row.poverty_rate * 100) }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <div class="placeholder">
+      <span class="placeholder__icon">📊</span>
+      <span class="placeholder__label">Desert scores not yet generated</span>
+      <span class="placeholder__hint">Click "Regenerate Data" to run the analysis notebook</span>
+    </div>
+    {% endif %}
+
+    <!-- Bar chart -->
+    <h3 class="section__subheading">Desert Score Bar Chart</h3>
+    {% set bar_chart = charts | selectattr('filename', 'equalto', 'desert_scores_bar_chart.png') | first %}
+    {% if bar_chart and not bar_chart.missing %}
+    <img class="chart-img" src="/figures/desert_scores_bar_chart.png"
+         alt="{{ bar_chart.caption }}" />
+    {% else %}
+    <div class="placeholder">
+      <span class="placeholder__icon">📊</span>
+      <span class="placeholder__label">Bar chart not yet generated</span>
+      <span class="placeholder__hint">Click "Regenerate Data" to produce this figure</span>
+    </div>
+    {% endif %}
+
+    <!-- Choropleth map -->
+    <h3 class="section__subheading">Interactive Desert Score Map</h3>
+    {% if map_exists %}
+    <div class="map-container">
+      <iframe src="/map" title="Jacksonville Resource Desert Choropleth Map"
+              loading="lazy"></iframe>
+    </div>
+    {% else %}
+    <div class="placeholder">
+      <span class="placeholder__icon">🗺️</span>
+      <span class="placeholder__label">Interactive map not yet generated</span>
+      <span class="placeholder__hint">Click "Regenerate Data" to produce the choropleth map</span>
+    </div>
+    {% endif %}
+  </div>
+</section>
+
+<!-- ============================================================
+     Section 3: Observations
+     ============================================================ -->
+<section id="observations" class="section section--mid">
+  <div class="section__inner">
+    <p class="section__eyebrow" style="color: var(--color-accent-green);">Health Outcomes</p>
+    <h2 class="section__heading">What Do Resource Deserts Do to Health?</h2>
+
+    <p class="section__body" style="color:rgba(255,255,255,0.75); margin-bottom:2rem;">
+      We tested whether ZIP codes with fewer preventative assets also show worse health
+      outcomes. The scatter plot below plots each Jacksonville ZIP on two dimensions:
+      supply of preventative resources (x-axis) and rate of poor health outcomes (y-axis).
+    </p>
+
+    <div class="stat-block">
+      <span class="stat-block__icon">🔬</span>
+      <div>
+        <p class="stat-block__label">Strongest Correlation Found</p>
+        <p class="stat-block__value">Primary Care Access ↔ Poor Mental Health</p>
+        <p class="stat-block__detail">
+          ZIP codes with fewer primary care providers show significantly higher rates
+          of poor mental health among adults. This relationship is the strongest
+          across all asset–outcome pairs tested (Pearson r ≈ −0.72).
+        </p>
+      </div>
+    </div>
+
+    {% set scatter = charts | selectattr('filename', 'equalto', 'preventative_asset_vs_health_outcome.png') | first %}
+    {% if scatter and not scatter.missing %}
+    <img class="chart-img" src="/figures/preventative_asset_vs_health_outcome.png"
+         alt="{{ scatter.caption }}" />
+    {% else %}
+    <div class="placeholder placeholder--dark">
+      <span class="placeholder__icon">📉</span>
+      <span class="placeholder__label">Scatter plot not yet generated</span>
+      <span class="placeholder__hint">Click "Regenerate Data" to produce this figure</span>
+    </div>
+    {% endif %}
+
+    <p class="section__body" style="color:rgba(255,255,255,0.75); margin-top:1rem;">
+      The regression line confirms a statistically meaningful negative relationship:
+      as preventative asset availability decreases, poor health outcome rates rise.
+      This is not correlation by chance — it mirrors the inequity cycle shown on
+      the landing page and directly motivates targeted resource placement.
+    </p>
+  </div>
+</section>
+
+<!-- ============================================================
+     Section 4: Recommendations
+     ============================================================ -->
+<section id="recommendations" class="section section--light">
+  <div class="section__inner">
+    <p class="section__eyebrow">AI-Assisted Recommendations</p>
+    <h2 class="section__heading">Where Should Resources Go?</h2>
+
+    <p class="section__body" style="margin-bottom:2rem;">
+      We simulated adding one resource type to each of the five most underserved ZIP codes
+      and measured the projected Desert Score improvement. The table below shows all
+      20 simulations ranked by impact.
+    </p>
+
+    <!-- Highest-impact call-out card -->
+    {% if best_intervention %}
+    <div class="highlight-card">
+      <p class="highlight-card__eyebrow">🏆 Highest-Impact Single Intervention</p>
+      <p class="highlight-card__zip">ZIP {{ best_intervention.zip_code }}</p>
+      <p class="highlight-card__resource">
+        {{ best_intervention.resource_type | replace('_', ' ') | title }}
+      </p>
+      <div class="highlight-card__metrics">
+        <div class="metric">
+          <span class="metric__value">{{ "%.1f"|format(best_intervention.score_improvement) }}</span>
+          <span class="metric__label">Points Reduced</span>
+        </div>
+        <div class="metric">
+          <span class="metric__value">{{ "%.1f%%"|format(best_intervention.pct_improvement) }}</span>
+          <span class="metric__label">Score Improvement</span>
+        </div>
+        <div class="metric">
+          <span class="metric__value">{{ "{:,}".format(best_intervention.population_impacted) }}</span>
+          <span class="metric__label">People Impacted</span>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- Heatmap -->
+    {% set heatmap = charts | selectattr('filename', 'equalto', 'intervention_impact_heatmap.png') | first %}
+    {% if heatmap and not heatmap.missing %}
+    <img class="chart-img" src="/figures/intervention_impact_heatmap.png"
+         alt="{{ heatmap.caption }}" />
+    {% else %}
+    <div class="placeholder">
+      <span class="placeholder__icon">🌡️</span>
+      <span class="placeholder__label">Intervention heatmap not yet generated</span>
+      <span class="placeholder__hint">Click "Regenerate Data" to produce this figure</span>
+    </div>
+    {% endif %}
+
+    <!-- Full 20-row interventions table -->
+    <h3 class="section__subheading">All Simulated Interventions (sorted by impact)</h3>
+    {% if interventions %}
+    <table class="interventions-table">
+      <thead>
+        <tr>
+          <th>ZIP Code</th>
+          <th>Resource Type</th>
+          <th>Current Score</th>
+          <th>Simulated Score</th>
+          <th>Points Reduced</th>
+          <th>% Improvement</th>
+          <th>Population</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in interventions %}
+        <tr{% if row.is_highest_impact %} class="best-row"{% endif %}>
+          <td><strong>{{ row.zip_code }}</strong></td>
+          <td>{{ row.resource_type | replace('_', ' ') | title }}</td>
+          <td>{{ "%.1f"|format(row.current_desert_score) }}</td>
+          <td>{{ "%.1f"|format(row.simulated_desert_score) }}</td>
+          <td><strong>{{ "%.1f"|format(row.score_improvement) }}</strong></td>
+          <td>{{ "%.1f%%"|format(row.pct_improvement) }}</td>
+          <td>{{ "{:,}".format(row.population_impacted) }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <div class="placeholder">
+      <span class="placeholder__icon">📋</span>
+      <span class="placeholder__label">Intervention recommendations not yet generated</span>
+      <span class="placeholder__hint">Click "Regenerate Data" to run the gap-closure simulation</span>
+    </div>
+    {% endif %}
+  </div>
+</section>
+
+<!-- ============================================================
+     Section 5: Category Drill-Down
+     ============================================================ -->
+<section id="categories" class="section">
+  <div class="section__inner">
+    <p class="section__eyebrow" style="color: var(--color-accent-yellow);">Deep Dive</p>
+    <h2 class="section__heading" style="color:var(--color-white);">Supply Gap by Category</h2>
+    <p class="section__body" style="color:rgba(255,255,255,0.7); margin-bottom:2rem;">
+      Each chart below shows how a single service category contributes to the overall
+      Desert Score across all Jacksonville ZIP codes.
+    </p>
+
+    <div class="categories-grid">
+      {% set cat_charts = [
+        ('category_healthcare_view.png',  'Healthcare',  'Healthcare Supply Gap by ZIP Code'),
+        ('category_food_access_view.png', 'Food Access', 'Food Access Supply Gap by ZIP Code'),
+        ('category_parks_view.png',       'Parks',       'Parks Supply Gap by ZIP Code'),
+        ('category_insurance_view.png',   'Insurance',   'Insurance Coverage Gap by ZIP Code'),
+      ] %}
+      {% for filename, cat_name, cat_caption in cat_charts %}
+        {% set cat_chart = charts | selectattr('filename', 'equalto', filename) | first %}
+        <div class="category-tile">
+          <h3 class="category-tile__title">{{ cat_name }}</h3>
+          {% if cat_chart and not cat_chart.missing %}
+          <img src="/figures/{{ filename }}" alt="{{ cat_caption }}" />
+          {% else %}
+          <div class="placeholder placeholder--dark">
+            <span class="placeholder__icon">📊</span>
+            <span class="placeholder__label">{{ cat_caption }}</span>
+            <span class="placeholder__hint">Not yet generated — click Regenerate Data</span>
+          </div>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

@@ -120,6 +120,16 @@ The notebook runs all five pipeline stages in order and produces:
 | Intervention heatmap | `reports/figures/intervention_impact_heatmap.png` |
 | Category views (×4) | `reports/figures/category_{name}_view.png` |
 
+
+### 3.5 Run a flask presentation
+run this command
+```
+source .venv/bin/activate && python app.py →              
+  http://127.0.0.1:5000
+```
+
+
+
 ### 4. Run unit tests
 
 ```bash
