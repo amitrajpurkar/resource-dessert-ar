@@ -27,13 +27,13 @@ The system has two distinct runtime modes:
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                     ANALYSIS PIPELINE                        │
+│                     ANALYSIS PIPELINE                       │
 │  (runs once, or on demand via the dashboard)                │
 │                                                             │
-│  data/raw/  ──►  ingestion  ──►  cleaning  ──►  features   │
+│  data/raw/  ──►  ingestion  ──►  cleaning  ──►  features    │
 │               (9 CSVs + GeoJSON)                            │
 │                                                             │
-│  features  ──►  models  ──►  visualization  ──►  outputs   │
+│  features  ──►  models  ──►  visualization  ──►  outputs    │
 │                                    │                        │
 │                    reports/figures/*.png                    │
 │                    reports/outputs/*.csv, *.json, *.html    │
@@ -43,10 +43,10 @@ The system has two distinct runtime modes:
                               │
                               ▼
 ┌─────────────────────────────────────────────────────────────┐
-│                   PRESENTATION DASHBOARD                     │
+│                   PRESENTATION DASHBOARD                    │
 │  (Flask web app — reads pipeline outputs, serves judges)    │
 │                                                             │
-│  GET /          ──►  index.html (5-section single page)    │
+│  GET /          ──►  index.html (5-section single page)     │
 │  GET /figures/  ──►  serves PNG charts                      │
 │  GET /map       ──►  serves Folium choropleth HTML          │
 │  POST /api/regenerate  ──►  re-runs pipeline in background  │
@@ -149,7 +149,7 @@ prob1-resource-desert/
 The pipeline follows a strict five-stage architecture. Each stage is implemented in a dedicated `src/` module and passes DataFrames explicitly — no global state, no shared mutable objects.
 
 ```
-┌──────────────┐    Dict[str, DataFrame]    ┌──────────────┐
+┌──────────────┐    Dict[str, DataFrame]     ┌──────────────┐
 │ ingestion.py │ ──────────────────────────► │ cleaning.py  │
 │              │     (9 raw datasets)        │              │
 │ load_raw_    │                             │ clean_       │
