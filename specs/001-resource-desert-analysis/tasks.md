@@ -133,6 +133,7 @@
 - [x] T032 Run `pytest tests/ -v -m "not e2e"` and confirm all unit tests pass (FR-015 gate 3)
 - [x] T033 Run `pytest tests/ --cov=src --cov-fail-under=70 --cov-report=term-missing` and confirm coverage ≥ 70% (FR-015 hard gate)
 - [x] T034 Clear all cell outputs in `notebooks/resource_desert_analysis.ipynb` before final commit (`jupyter nbconvert --ClearOutputPreprocessor.enabled=True`)
+- [x] T035 Download Census TIGER/Line ZCTA5 shapefile for the full US from `https://www2.census.gov/geo/tiger/TIGER2022/ZCTA520/tl_2022_us_zcta520.zip` via `geopandas.read_file(url)`; filter to Jacksonville-range ZIPs (`ZCTA5CE20` starting with `"320"` or `"322"`, yielding 83 ZCTAs); write to `data/raw/jacksonville_zctas.geojson` (GeoJSON driver) — required by `create_choropleth_map()` (T017) and e2e test T029
 
 ---
 
